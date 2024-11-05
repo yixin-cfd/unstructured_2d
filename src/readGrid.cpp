@@ -51,7 +51,7 @@ void Geometry::ReadGrid()
   int    i, ib, ibn, ibf, ibegf, iendf, ibegn, iendn;
   string str;
   // open file
-  ifstream stream( trim(fnameGrid) );
+  ifstream stream(trim(fnameGrid));
   if (stream.fail()) throw runtime_error( "could not open grid file." );
 
   str = ReadLine( stream );

@@ -23,22 +23,6 @@
 //  Created February 15, 2014
 //  Last modification: September 22, 2014
 // 
-//=============================================================================
-//
-//  This program is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU General Public License
-//  as published by the Free Software Foundation; either version 2
-//  of the License, or (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
 //*****************************************************************************
 
 #include <cstdio>
@@ -51,13 +35,13 @@
 #include "userInput.h"
 
 using namespace std;
-void Info();
+void Info();    
 
-/// Main program of the flow solver.
+/// 流求解器的主程序
 ///
-/// @param argc   number of command line arguments
-/// @param argv[] list of arguments
-/// @return       EXIT_SUCCESS or an error code
+/// @param argc   命令行参数数量
+/// @param argv[] 参数列表
+/// @return       EXIT_SUCCESS 或者 error code
 ///
 int main( int argc, char *argv[] )
 {
@@ -82,14 +66,29 @@ int main( int argc, char *argv[] )
   {
     try
     {
-      UserInput::Read( argv[1],solver,output );
+      UserInput::Read(argv[1], solver, output);
     }
     catch (exception &e)
     {
       Error::Message( e.what() );
     }
   }
-  else Info();
+  else if(argc == 1){   
+    string input_path;
+    cout << "please enter input file:";
+    cin >> input_path;
+    try
+    {
+      UserInput::Read(input_path.c_str(), solver, output);
+    }
+    catch (exception &e)
+    {
+      Error::Message( e.what() );
+    }
+  }
+  else{
+    Info();
+  }
 
   // initialize some constants
 

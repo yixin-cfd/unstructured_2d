@@ -40,8 +40,7 @@
 #include "timeDiscr.h"
 
 /// @class Solver
-/// Encompasses variables and functions related to the flow solver. It takes care
-/// of input, output and initialization of main solution and convergence data.
+/// 包含与流求解器相关的变量和函数。它需要处理输入、输出和初始化解和收敛数据。
 ///
 class Solver
 {

@@ -34,24 +34,20 @@
 
 using namespace std;
 
-/// Opens user input file, reads and processes the data.
+/// 打开输入文件，读取和处理数据
 ///
-/// @param fileName  path and name of the user-input file
-/// @param solver    settings related to the solver
-/// @param output    settings related to the plot output
+/// @param fileName  输入文件路径
+/// @param solver    设置求解器
+/// @param output    设置输出类
 /// @exception       std::runtime_error  problem during the reading
 ///
 void UserInput::Read( const char *fileName, Solver &solver, Output &output )
 {
   string str;
-
-  // open file
-
   ifstream stream( fileName );
   if (stream.fail()) throw runtime_error( "could not open user input file." );
 
   // title and file names
-
   str = ReadLine( stream );
   output.title = ReadLine( stream );
 

@@ -29,6 +29,7 @@
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
+#include "streamIO.h"
 #include "output.h"
 
 using namespace std;
@@ -59,8 +60,8 @@ void Output::Flowfield( const Geometry &geometry, const FluidProps &fluidProps,
   // open file
 
   stringstream str;
-  str << right << setw(5) << setfill('0') << iter;
-  string fname = fnameFlow + str.str() + ".v2d";
+  str << right << setw(5) << setfill('0') << iter;    // 名称 + 迭代轮数
+  string fname = trim(fnameFlow) + str.str() + ".plt";
 #ifdef _WIN32
   ofstream stream( fname,ios::binary | ios::trunc,_SH_DENYRW );
 #else 
@@ -68,35 +69,20 @@ void Output::Flowfield( const Geometry &geometry, const FluidProps &fluidProps,
 #endif
   if (stream.fail()) throw runtime_error( "could not open plot file (flow field) for writing." );
 
-  // header
-
   nquant = 0;
   for (m=0; m<MXQFIELD; m++) if (varOn[m]) nquant++;
-
-  stream << title << endl
-         << "1" << endl
-         << "Flow Field" << endl
-         << "1 " << nquant+2 << endl
-         << "x [m]" << endl
-         << "y [m]" << endl;
-
-  // names of variables
-
+  // 表头
+  stream << "TITLE = " << "\"" << trim(title) <<"\"" <<endl;
+  stream << "VARIABLES = " << "\"x [m]\"" << ", " << "\"y [m]\"" << ", ";
   for (m=0; m<MXQFIELD; m++)
   {
-    if (varOn[m]) stream << varName[m] << endl;
+    if (varOn[m]) stream <<"\""<< varName[m] << "\", ";
   }
-
-  // number of data points and grid elements
-
-  stream << "0 0" << endl
-         << geometry.nndInt << " " << geometry.nTria << " 0" << endl
-         << "Unstructured" << endl;
-
+  stream << endl;
+  // 点数量和单元信息
+  stream << "ZONE NODES = " << geometry.nndInt << ", ELEMENTS = " << geometry.nTria << ", DATAPACKING=POINT, ZONETYPE=FETRIANGLE" << endl;
   //  compute quantities and write them out
-
   stream << scientific << setprecision(8);
-
   for (i=0; i<geometry.nndInt; i++)
   {
     stream << geometry.coords[i].x << " "
@@ -183,9 +169,9 @@ void Output::Flowfield( const Geometry &geometry, const FluidProps &fluidProps,
 
   for (i=0; i<geometry.nTria; i++)
   {
-    stream << geometry.tria[i].node[0] << " "
-           << geometry.tria[i].node[1] << " "
-           << geometry.tria[i].node[2] << endl;
+    stream << geometry.tria[i].node[0] + 1<< " "    // tecplot 索引从 1 开始
+           << geometry.tria[i].node[1] + 1<< " "
+           << geometry.tria[i].node[2] + 1<< endl;
   }
 
   stream.close();
