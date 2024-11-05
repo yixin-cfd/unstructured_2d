@@ -33,5 +33,5 @@ file(GLOB_RECURSE HEADER_FILES
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/run)
 
 # 定义目标可执行文件
-add_executable(UNFVM2D ${SRC_FILES} ${HEADER_FILES})
+add_executable(Unstruct2D ${SRC_FILES} ${HEADER_FILES})
 
